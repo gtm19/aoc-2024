@@ -1,6 +1,8 @@
 from challenges.day_01 import part_1, part_2
 
-with open("tests/data/day_01.txt", "r") as f:
+from .utils import TEST_DATA_DIR
+
+with open(TEST_DATA_DIR / "day_01.txt", "r") as f:
     lines = f.read().splitlines()
 
 

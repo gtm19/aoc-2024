@@ -1,7 +1,6 @@
 from collections import Counter
-from pathlib import Path
 
-DATA_DIR = Path("challenges", "data")
+from utils import DATA_DIR
 
 
 def lines_to_lists(lines: list[str]) -> tuple[list[int], list[int]]:
