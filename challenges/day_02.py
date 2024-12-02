@@ -10,7 +10,7 @@ def check_safety(line: str, tolerant: bool = False) -> bool:
     if tolerant and not safe:
         for i in range(len(nums)):
             filtered_nums = [num for j, num in enumerate(nums) if i != j]
-            filtered_diffs = diffs = [
+            filtered_diffs = [
                 x_2 - x_1 for x_1, x_2 in zip(filtered_nums[:-1], filtered_nums[1:])
             ]
             safe = all(-3 <= diff <= -1 for diff in filtered_diffs) or all(
