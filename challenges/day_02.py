@@ -1,4 +1,4 @@
-from utils import DATA_DIR
+from challenges.utils import DATA_DIR
 
 
 def check_safety(line: str, tolerant: bool = False) -> bool:

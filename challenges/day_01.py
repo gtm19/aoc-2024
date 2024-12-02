@@ -1,6 +1,4 @@
-from collections import Counter
-
-from utils import DATA_DIR
+from challenges.utils import DATA_DIR
 
 
 def lines_to_lists(lines: list[str]) -> tuple[list[int], list[int]]:
@@ -12,18 +10,12 @@ def lines_to_lists(lines: list[str]) -> tuple[list[int], list[int]]:
 
 def part_1(lines: list[str]) -> int:
     left, right = lines_to_lists(lines)
-
     return sum(abs(l - r) for l, r in zip(sorted(left), sorted(right)))
 
 
 def part_2(lines: list[str]) -> int:
     left, right = lines_to_lists(lines)
-    # Counter essentially creates a tally of values which appear in the `right`
-    # list
-    # i.e. [1, 1, 2, 3] becomes {1: 2, 2: 1, 3: 1}
-    right_counts = Counter(right)
-
-    return sum(num * right_counts[num] for num in left if num in right_counts)
+    return sum(num * right.count(num) for num in left if num in right)
 
 
 if __name__ == "__main__":
