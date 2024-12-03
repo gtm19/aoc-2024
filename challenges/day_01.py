@@ -1,4 +1,4 @@
-from challenges.utils import DATA_DIR
+from challenges.utils import todays_lines
 
 
 def lines_to_lists(lines: list[str]) -> tuple[list[int], list[int]]:
@@ -19,7 +19,6 @@ def part_2(lines: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    with open(DATA_DIR / "day_01.txt", "r") as f:
-        input_lines = f.read().splitlines()
+    input_lines = todays_lines(__file__)
     print("PART 1: ", part_1(input_lines))
     print("PART 2: ", part_2(input_lines))
