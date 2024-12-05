@@ -1,26 +1,23 @@
-import re
-
 from challenges.utils import todays_lines
 
 
 def pages_in_right_order(lines: str, fix_invalid=False) -> int:
     rules, updates = lines.split("\n\n")
 
+    updates = [list(map(int, update.split(","))) for update in updates.split()]
     rulebook = {}
 
-    regex = re.compile(r"(\d+)\|(\d+)")
+    for left, right in [
+        tuple(map(int, nums.split("|"))) for nums in rules.splitlines()
+    ]:
+        rulebook[left] = rulebook.get(left, set()) | {right}
 
-    for left, right in regex.findall(rules):
-        rulebook[int(left)] = rulebook.get(int(left), set()) | {int(right)}
-
-    rulebook[int(right)] = rulebook.get(int(right), set())
-
-    updates_nice = [list(map(int, update.split(","))) for update in updates.split()]
+    rulebook[right] = rulebook.get(right, set())
 
     valid_updates = []
     invalid_updates = []
 
-    for update in updates_nice:
+    for update in updates:
         valid = True
         for i, _ in enumerate(update[:-1]):
             while update[i + 1] not in rulebook.get(update[i], set()):
