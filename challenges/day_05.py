@@ -24,7 +24,7 @@ def pages_in_right_order(lines: str, fix_invalid=False) -> int:
                 valid = False
                 must_be_after = [k for k in update[:i] if update[i + 1] in rulebook[k]]
                 insert_at = update.index(must_be_after[-1]) + 1 if must_be_after else 0
-                update[insert_at], update[i + 1] = update[i + 1], update[insert_at]
+                update.insert(insert_at, update.pop(i + 1))
         if valid:
             valid_updates.append(update)
         else:
