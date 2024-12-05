@@ -13,6 +13,8 @@ def pages_in_right_order(lines: str, fix_invalid=False) -> int:
     for left, right in regex.findall(rules):
         rulebook[int(left)] = rulebook.get(int(left), set()) | {int(right)}
 
+    rulebook[int(right)] = rulebook.get(int(right), set())
+
     updates_nice = [list(map(int, update.split(","))) for update in updates.split()]
 
     valid_updates = []
@@ -23,12 +25,14 @@ def pages_in_right_order(lines: str, fix_invalid=False) -> int:
         for i, _ in enumerate(update[:-1]):
             while update[i + 1] not in rulebook.get(update[i], set()):
                 valid = False
-                after_location = update.index(update[i + 1])
-                update[i], update[after_location] = update[after_location], update[i]
+                must_be_after = [k for k in update[:i] if update[i + 1] in rulebook[k]]
+                insert_at = update.index(must_be_after[-1]) + 1 if must_be_after else 0
+                update[insert_at], update[i + 1] = update[i + 1], update[insert_at]
         if valid:
             valid_updates.append(update)
         else:
             invalid_updates.append(update)
+
     if fix_invalid:
         return sum(update[len(update) // 2] for update in invalid_updates)
     return sum(update[len(update) // 2] for update in valid_updates)
@@ -43,7 +47,7 @@ def part_2(lines: str) -> int:
 
 
 if __name__ == "__main__":
-    input_lines = todays_lines(__file__, split=False, test=True)
+    input_lines = todays_lines(__file__, split=False, test=False)
 
     print("PART 1: ", part_1(input_lines))
     print("PART 2: ", part_2(input_lines))
