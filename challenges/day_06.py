@@ -14,6 +14,9 @@ DIRECTIONS = {
 OBSTACLE = "#"
 START = "^"
 
+# TODO: take another look at this where the obstacles are a list of locations
+# which you append to for part 2 - should be much quicker
+
 
 def inside_grid(loc, grid: list[str]) -> bool:
     x, y = loc
