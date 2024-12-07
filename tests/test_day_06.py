@@ -11,4 +11,4 @@ def test_part_1():
 
 
 def test_part_2():
-    assert part_2(lines) == 41
+    assert part_2(lines) == 6
