@@ -1,4 +1,6 @@
+from functools import wraps
 from pathlib import Path
+from time import perf_counter
 
 DATA_DIR = Path("challenges", "data")
 TEST_DATA_DIR = Path("tests", "data")
@@ -12,3 +14,26 @@ def todays_lines(file, split: bool = True, test: bool = False) -> str | list[str
         if split:
             return data.splitlines()
         return data
+
+
+def timeit(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        s = perf_counter()
+        result = func(*args, **kwargs)
+        f = perf_counter()
+        print(f"{func.__name__} ran in {f - s:.2f}s")
+        return result
+
+    return wrapper
+
+
+if __name__ == "__main__":
+    from time import sleep
+
+    @timeit
+    def something():
+        sleep(2)
+        return True
+
+    something()
