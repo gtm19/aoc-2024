@@ -1,38 +1,32 @@
 from challenges.utils import todays_lines
 
-DIRECTIONS = ((0, -1), (1, 0), (0, 1), (-1, 0))
-
 
 def make_grid(lines: list[str]):
-    grid = {(x, y): c for y, row in enumerate(lines) for x, c in enumerate(row)}
+    # used complex numbers, inspired by
+    # https://www.reddit.com/r/adventofcode/comments/1h7tovg/comment/m0o44m5/
+    grid = {x + y * 1j: c for y, row in enumerate(lines) for x, c in enumerate(row)}
     start = (
-        (0, -1),
+        -1j,
         next(k for k, v in grid.items() if v == "^"),
     )
     return grid, start
 
 
 def walk_around(grid, start) -> tuple[list, bool]:
-    direction, (x, y) = start
-    visited = {(direction, (x, y))}
-    just_locs = {(x, y)}
-    while True:
-        next_x, next_y = x + direction[0], y + direction[1]
-        next_value = grid.get((next_x, next_y))
-        if not next_value:
-            infinite = False
-            break
-        if (direction, (next_x, next_y)) in visited:
-            infinite = True
-            break
-        if next_value == "#":
-            direction = DIRECTIONS[(DIRECTIONS.index(direction) + 1) % 4]
+    direction, location = start
+    visited = set()
+    just_locs = set()
+    while location in grid and (direction, location) not in visited:
+        if location not in just_locs:
+            visited.add((direction, location))
+        just_locs.add(location)
+        if grid.get(location + direction) == "#":
+            # rotate
+            direction *= 1j
         else:
-            x, y = next_x, next_y
-            if (x, y) not in just_locs:
-                visited.add((direction, (x, y)))
-                just_locs.add((x, y))
-    return visited, infinite
+            # move
+            location += direction
+    return visited, (direction, location) in visited
 
 
 def part_1(grid, start) -> int:
@@ -47,7 +41,7 @@ def part_2(grid, start) -> int:
             # patch grid with an obstacle at the given location
             grid | {obs[1]: "#"},
             # can step back one space and start right before the obstacle
-            (obs[0], (obs[1][0] - obs[0][0], obs[1][1] - obs[0][1])),
+            (obs[0], obs[1] - obs[0]),
         )[1]
         for obs in visited
         # can't put an obstacle at the start
