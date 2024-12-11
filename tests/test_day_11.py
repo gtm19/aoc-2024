@@ -6,7 +6,3 @@ lines = todays_lines(__file__, test=True)
 
 def test_part_1():
     assert part_1(lines) == 55312
-
-
-def test_part_2():
-    assert part_2(lines) == False
