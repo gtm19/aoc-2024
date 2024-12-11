@@ -22,15 +22,19 @@ name = "aoc-2024"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "advent-of-code-data" },
     { name = "pytest" },
 ]
 
-[package.metadata]
-requires-dist = [
-    { name = "advent-of-code-data", specifier = ">=2.0.4" },
-    { name = "pytest", specifier = ">=8.3.4" },
+[package.dev-dependencies]
+dev = [
+    { name = "advent-of-code-data" },
 ]
+
+[package.metadata]
+requires-dist = [{ name = "pytest", specifier = ">=8.3.4" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "advent-of-code-data", specifier = ">=2.0.4" }]
 
 [[package]]
 name = "aocd-example-parser"
