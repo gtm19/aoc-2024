@@ -5,15 +5,15 @@ from challenges.utils import todays_lines
 
 def blink(stones: dict[int, int], times: int = 1) -> None:
     for _ in range(times):
-        for k, count in list(stones.items()):
-            stones[k] -= count
-            if len(str(k)) % 2 == 0:
-                stones[int(str(k)[: len(str(k)) // 2])] += count
-                stones[int(str(k)[len(str(k)) // 2 :])] += count
-            elif k == 0:
+        for marked_with, count in list(stones.items()):
+            stones[marked_with] -= count
+            if len(str(marked_with)) % 2 == 0:
+                stones[int(str(marked_with)[: len(str(marked_with)) // 2])] += count
+                stones[int(str(marked_with)[len(str(marked_with)) // 2 :])] += count
+            elif marked_with == 0:
                 stones[1] += count
             else:
-                stones[k * 2024] += count
+                stones[marked_with * 2024] += count
 
 
 def part_1(lines: list[str]) -> int:
