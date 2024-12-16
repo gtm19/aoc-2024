@@ -1,8 +1,4 @@
-from challenges.utils import todays_lines
-
-
-def make_grid(lines: list[str]) -> dict:
-    return {x + y * 1j: c for y, row in enumerate(lines) for x, c in enumerate(row)}
+from challenges.utils import make_grid, todays_lines
 
 
 def get_price(grid: dict, use_sides: bool = False) -> list[set]:

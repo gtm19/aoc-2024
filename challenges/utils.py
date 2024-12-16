@@ -28,6 +28,10 @@ def timeit(func):
     return wrapper
 
 
+def make_grid(lines: list[str]) -> dict:
+    return {x + y * 1j: c for y, row in enumerate(lines) for x, c in enumerate(row)}
+
+
 if __name__ == "__main__":
     from time import sleep
 
