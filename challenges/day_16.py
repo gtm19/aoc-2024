@@ -1,43 +1,41 @@
+from heapq import heappop, heappush
+
 from challenges.utils import make_grid, todays_lines
 
 
 def part_1(grid: dict) -> int:
     grid = {k: v for k, v in grid.items() if v != "#"}
-    # dist = {(k, d): float("inf") for k in grid for d in (1, 1j, -1j, -1)}
-    dist = {}
     prev = {}
-    to_visit = set((k, d) for k in grid.keys() for d in (1, 1j, -1j, -1))
 
     start = next(k for k in grid if grid[k] == "S")
-    finish = next(k for k in grid if grid[k] == "E")
-    dist[(start, 1)] = 0
+    queue = [(0, i := 0, start, 1)]
+    seen = set()
 
-    while to_visit:
-        current, direction = sorted(
-            list(set(dist) & to_visit), key=lambda v: dist.get(v, float("inf"))
-        )[0]
+    while queue:
+        distance, _, current, direction = heappop(queue)
 
-        if current == finish:
+        seen.add((current, direction))
+
+        if grid[current] == "E":
+            best = distance
+            end = current
             break
 
-        to_visit.remove((current, direction))
-        # next moves:
-        #  - forward in current direction (1 point) [(current + dir, dir)]
-        #  - rotate left (1000 points) [(current, dir * 1j)]
-        #  - rotate right (1000 points) [current, dir * -1j]
-        for next_node, next_dir, distance in zip(
-            (current + direction, current, current),
-            (direction, direction * 1j, direction * -1j),
-            (1, 1000, 1000),
+        for d, score in zip(
+            (1, 1j, -1j),
+            (1, 1001, 1001),
         ):
-            if next_node in grid:
-                new_dist = dist[(current, direction)] + distance
-                if new_dist <= dist.get((next_node, next_dir), float("inf")):
-                    dist[(next_node, next_dir)] = new_dist
-                    if distance == 1:
-                        prev[next_node] = prev.get(next_node, set()) | {current}
+            dist, i, nn, nd = (
+                distance + score,
+                i + 1,
+                current + d * direction,
+                d * direction,
+            )
+            if nn in grid and (nn, nd) not in seen:
+                heappush(queue, (dist, i, nn, nd))
+                prev[nn] = prev.get(nn, set()) | {current}
 
-    return int(min(v for (node, _), v in dist.items() if node == finish))
+    return best
 
 
 def part_2(grid: dict) -> int:
