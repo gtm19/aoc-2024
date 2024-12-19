@@ -23,43 +23,32 @@ def find_path(lines: str, width: int, height: int, limit: int) -> int:
     while queue:
         distance, x, y = heappop(queue)
 
-        visited.add((x, y))
-
         if grid[x, y] == "E":
             dist[x, y] = distance
             break
 
-        if distance <= dist.get((x, y), float("inf")):
-            dist[x, y] = distance
-
         for x_move, y_move in ((1, 0), (0, 1), (-1, 0), (0, -1)):
             d, nx, ny = distance + 1, x + x_move, y + y_move
-            if (
-                (nx, ny) in grid
-                and (nx, ny) not in visited
-                and (d, nx, ny) not in queue
-            ):
+            if (nx, ny) in grid and (nx, ny) not in visited:
                 heappush(queue, (d, nx, ny))
+                visited.add((nx, ny))
 
     return dist[height - 1, width - 1]
 
 
 print("Part 1: ", find_path(lines, 71, 71, 1024))
 
-min_lim = 1024
-max_lim = len(lines)
+min_lim = 1025
+max_lim = len(lines) - 1
 
-lim_range = range(min_lim, max_lim)
-while len(lim_range) > 1:
-    try_lim = lim_range[len(lim_range) // 2]
+while max_lim - min_lim > 1:
+    try_lim = (max_lim + min_lim) // 2
     try:
         find_path(lines, 71, 71, try_lim)
         min_lim = try_lim
     except KeyError:
         max_lim = try_lim
-    finally:
-        lim_range = range(min_lim, max_lim)
 
-bad_byte = lines.splitlines()[max(lim_range)]
+bad_byte = lines.splitlines()[max_lim - 1]
 
 print("Part 2: ", bad_byte)
