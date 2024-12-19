@@ -1,6 +1,6 @@
 from functools import cache
 
-from utils import DATA_DIR, TEST_DATA_DIR
+from utils import DATA_DIR
 
 with open(DATA_DIR / "day_19.txt", "r") as f:
     lines = f.read()
